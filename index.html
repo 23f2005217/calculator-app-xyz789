@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 320px;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .display {
+            background-color: #222;
+            color: #fff;
+            font-size: 3em;
+            padding: 20px;
+            text-align: right;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            word-break: break-all;
+            overflow: hidden;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 1.8em;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn:hover {
+            background-color: #d0d0d0;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .btn.operator {
+            background-color: #ff9500;
+            color: #fff;
+        }
+
+        .btn.operator:hover {
+            background-color: #e08500;
+        }
+
+        .btn.clear {
+            background-color: #ff3b30;
+            color: #fff;
+        }
+
+        .btn.clear:hover {
+            background-color: #e02f25;
+        }
+        
+        .btn.equals {
+            background-color: #007aff;
+            color: #fff;
+            grid-row: span 2;
+        }
+
+        .btn.equals:hover {
+            background-color: #006ee0;
+        }
+
+        .btn.zero {
+            grid-column: span 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="calculator-display">0</div>
+        <div class="buttons">
+            <button class="btn clear" id="btn-clear">C</button>
+            <button class="btn operator" data-op="/">/</button>
+            <button class="btn operator" data-op="*">*</button>
+            <button class="btn operator" data-op="-">-</button>
+
+            <button class="btn number">7</button>
+            <button class="btn number">8</button>
+            <button class="btn number">9</button>
+            <button class="btn operator" data-op="+">+</button>
+
+            <button class="btn number">4</button>
+            <button class="btn number">5</button>
+            <button class="btn number">6</button>
+            <button class="btn equals" id="btn-equals">=</button>
+
+            <button class="btn number">1</button>
+            <button class="btn number">2</button>
+            <button class="btn number">3</button>
+
+            <button class="btn number zero">0</button>
+            <button class="btn decimal" id="btn-decimal">.</button>
+        </div>
+    </div>
+    <script>
+        const display = document.getElementById('calculator-display');
+        let currentInput = '0';
+        let previousInput = '';
+        let operator = null;
+        let shouldResetDisplay = false;
+
+        function updateDisplay() {
+            display.textContent = currentInput;
+            if (currentInput.length > 10 && currentInput.length <= 15) {
+                display.style.fontSize = '2.5em';
+            } else if (currentInput.length > 15) {
+                display.style.fontSize = '2em';
+            } else {
+                display.style.fontSize = '3em';
+            }
+        }
+
+        function appendNumber(number) {
+            if (shouldResetDisplay) {
+                currentInput = number;
+                shouldResetDisplay = false;
+            } else if (currentInput === '0' && number !== '.') {
+                currentInput = number;
+            } else if (currentInput.length < 20) {
+                currentInput += number;
+            }
+            updateDisplay();
+        }
+
+        function appendDecimal() {
+            if (shouldResetDisplay) {
+                currentInput = '0.';
+                shouldResetDisplay = false;
+            } else if (!currentInput.includes('.')) {
+                if (currentInput === '') {
+                    currentInput = '0.';
+                } else {
+                    currentInput += '.';
+                }
+            }
+            updateDisplay();
+        }
+
+        function chooseOperator(op) {
+            if (currentInput === '' && previousInput === '') {
+                return;
+            }
+
+            if (previousInput !== '' && !shouldResetDisplay) {
+                if (currentInput !== '') {
+                    compute();
+                } else {
+                    operator = op;
+                    updateDisplay();
+                    return;
+                }
+            }
+            
+            if (currentInput !== '' || (currentInput === '0' && previousInput === '')) {
+                operator = op;
+                previousInput = currentInput;
+                currentInput = '';
+                shouldResetDisplay = true;
+            }
+            updateDisplay();
+        }
+
+        function compute() {
+            let computation;
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+
+            if (isNaN(prev) || isNaN(current)) {
+                if (currentInput === '' && previousInput !== '') {
+                     currentInput = previousInput;
+                } else if (currentInput === '' && previousInput === '') {
+                    currentInput = '0';
+                }
+                operator = null;
+                previousInput = '';
+                shouldResetDisplay = true;
+                updateDisplay();
+                return;
+            }
+
+            switch (operator) {
+                case '+':
+                    computation = prev + current;
+                    break;
+                case '-':
+                    computation = prev - current;
+                    break;
+                case '*':
+                    computation = prev * current;
+                    break;
+                case '/':
+                    if (current === 0) {
+                        currentInput = 'Error';
+                        previousInput = '';
+                        operator = null;
+                        shouldResetDisplay = true;
+                        updateDisplay();
+                        return;
+                    }
+                    computation = prev / current;
+                    break;
+                default:
+                    operator = null;
+                    previousInput = '';
+                    shouldResetDisplay = true;
+                    updateDisplay();
+                    return;
+            }
+            
+            currentInput = parseFloat(computation.toFixed(10)).toString();
+            operator = null;
+            previousInput = '';
+            shouldResetDisplay = true;
+            updateDisplay();
+        }
+
+        function clear() {
+            currentInput = '0';
+            previousInput = '';
+            operator = null;
+            shouldResetDisplay = false;
+            updateDisplay();
+        }
+
+        document.querySelectorAll('.btn.number').forEach(button => {
+            button.addEventListener('click', () => appendNumber(button.textContent));
+        });
+
+        document.getElementById('btn-decimal').addEventListener('click', appendDecimal);
+
+        document.querySelectorAll('.btn.operator').forEach(button => {
+            button.addEventListener('click', () => chooseOperator(button.dataset.op));
+        });
+
+        document.getElementById('btn-equals').addEventListener('click', compute);
+        document.getElementById('btn-clear').addEventListener('click', clear);
+
+        updateDisplay();
+    </script>
+</body>
+</html>
