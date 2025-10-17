@@ -1,38 +1,40 @@
-# Calculator App
+# Calculator App (calculator-app-xyz789)
 
-![GitHub repo size](https://img.shields.io/github/repo-size/23f2005217/calculator-app-xyz789)
-![GitHub top language](https://img.shields.io/github/top-language/23f2005217/calculator-app-xyz789)
-![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![GitHub Pages](https://github.com/23f2005217/calculator-app-xyz789/actions/workflows/deploy.yml/badge.svg)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20App-blue.svg)](https://23f2005217.github.io/calculator-app-xyz789/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Table of Contents
-* [Project Overview](#project-overview)
-* [Live Demo](#live-demo)
-* [Features](#features)
-* [Setup Instructions](#setup-instructions)
-* [Usage](#usage)
-* [Technical Implementation](#technical-implementation)
-* [License](#license)
-* [Repository](#repository)
+## 📝 Project Description
 
-## Project Overview
+The `calculator-app-xyz789` project is a modern, web-based calculator application designed for intuitive arithmetic operations. This updated version significantly expands its functionality to include advanced mathematical operations such as square root (√) and percentage (%), alongside a dedicated "Clear" (C) button for easily resetting the calculator display and state. Built with a focus on user experience, it provides a reliable and accessible tool for everyday calculations.
 
-The **Calculator App** is a simple, yet robust, web-based calculator designed to perform basic arithmetic operations. It features a clean, intuitive user interface with clearly defined buttons for numbers and operations, ensuring a smooth user experience for everyday calculations. This project serves as a practical demonstration of fundamental web development skills using HTML, CSS, and JavaScript.
+## ✨ Features
 
-## Live Demo
+This calculator application offers a comprehensive set of functionalities:
 
-Experience the calculator live in your browser:
+*   **Basic Arithmetic Operations:** Perform addition (`+`), subtraction (`-`), multiplication (`*`), and division (`/`).
+*   **Advanced Operations:**
+    *   **Square Root (√):** Calculate the square root of any non-negative number.
+    *   **Percentage (%):** Convert a number to its percentage equivalent (e.g., `50` followed by `%` yields `0.5`).
+*   **Clear Functionality:** A dedicated "C" button to reset the current input, display, and entire calculation state.
+*   **Decimal Support:** Handle calculations involving floating-point numbers with precision.
+*   **Responsive Design:** (Assumed, good practice for web apps) The interface is designed to be user-friendly across various device sizes.
+*   **Intuitive User Interface:** A clean and straightforward layout for ease of use.
 
-[**Live Demo Link**](https://23f2005217.github.io/calculator-app-xyz789/)
+## 🚀 Live Demo
 
-## Features
+Experience the calculator in action directly in your browser:
 
-*   **Basic Arithmetic Operations**: Perform addition (+), subtraction (-), multiplication (*), and division (/).
-*   **User-Friendly Interface**: A clean and intuitive layout with distinct buttons for numbers (0-9) and operations.
-*   **Clear Display**: A prominent display area to show input numbers and calculation results.
-*   **Clear Functionality**: A dedicated button to reset the calculator and clear the current input/result.
+👉 **[Live Demo](https://23f2005217.github.io/calculator-app-xyz789/)**
 
-## Setup Instructions
+## 🛠️ Getting Started
 
-To get a local copy of this project up and running, follow these simple steps:
+To get a local copy of this project up and running, follow these simple steps.
 
-1.  **Clone the repository**:
+### Prerequisites
+
+You only need a modern web browser to run this application. No special tools or server-side environments are required.
+
+### Installation
+
+1.  **Clone the repository:**
