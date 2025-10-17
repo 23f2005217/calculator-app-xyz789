@@ -104,10 +104,12 @@
             <button id="number-btn-4">4</button>
             <button id="number-btn-5">5</button>
             <button id="number-btn-6">6</button>
+            <button id="sqrt-btn" class="operator">√</button> <!-- Added Square Root button -->
 
             <button id="number-btn-1">1</button>
             <button id="number-btn-2">2</button>
             <button id="number-btn-3">3</button>
+            <button id="percent-btn" class="operator">%</button> <!-- Added Percentage button -->
 
             <button id="number-btn-0" style="grid-column: span 2;">0</button>
             <button id="decimal-btn">.</button>
@@ -124,7 +126,7 @@
 
         function updateDisplay() {
             // Limit display length to prevent overflow for very long numbers/errors
-            if (currentInput.length > 12) {
+            if (currentInput.length > 12 && currentInput !== 'Error') {
                 display.value = parseFloat(currentInput).toPrecision(8); // Use precision for long numbers
             } else {
                 display.value = currentInput;
@@ -137,6 +139,12 @@
             operator = null;
             waitingForSecondOperand = false;
             updateDisplay();
+        }
+
+        function clearStateOnError() {
+            firstOperand = null;
+            operator = null;
+            waitingForSecondOperand = true; // After an error, next input should start fresh
         }
 
         function inputDigit(digit) {
@@ -231,10 +239,40 @@
             updateDisplay();
         }
 
-        function clearStateOnError() {
-            firstOperand = null;
-            operator = null;
-            waitingForSecondOperand = true; // After an error, next input should start fresh
+        function applySquareRoot() {
+            if (currentInput === 'Error') return;
+
+            let value = parseFloat(currentInput);
+            if (value < 0) {
+                currentInput = 'Error'; // Cannot take square root of negative number
+                updateDisplay();
+                clearStateOnError();
+                return;
+            }
+            currentInput = String(Math.sqrt(value));
+            updateDisplay();
+            waitingForSecondOperand = false; // The current input is the result of sqrt
+        }
+
+        function applyPercentage() {
+            if (currentInput === 'Error') return;
+
+            let currentValue = parseFloat(currentInput);
+
+            if (operator && firstOperand !== null && !waitingForSecondOperand) {
+                // Scenario: X operator Y % (e.g., 50 + 10 %)
+                // Calculate Y% of X, then use this result as the second operand
+                const percentageValue = firstOperand * (currentValue / 100);
+                currentInput = String(percentageValue);
+                updateDisplay();
+                waitingForSecondOperand = false;
+            } else {
+                // Scenario: X % (e.g., 50 %)
+                // Simply divide the current number by 100
+                currentInput = String(currentValue / 100);
+                updateDisplay();
+                waitingForSecondOperand = false;
+            }
         }
 
         // Event Listeners
@@ -246,6 +284,9 @@
         document.getElementById('subtract-btn').addEventListener('click', () => handleOperator('-'));
         document.getElementById('multiply-btn').addEventListener('click', () => handleOperator('*'));
         document.getElementById('divide-btn').addEventListener('click', () => handleOperator('/'));
+
+        document.getElementById('sqrt-btn').addEventListener('click', applySquareRoot); // New sqrt button listener
+        document.getElementById('percent-btn').addEventListener('click', applyPercentage); // New percent button listener
 
         for (let i = 0; i <= 9; i++) {
             document.getElementById(`number-btn-${i}`).addEventListener('click', () => inputDigit(String(i)));
